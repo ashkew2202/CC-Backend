@@ -1,16 +1,25 @@
 package main
- 
+
 import (
-	"os"
-	"log"
 	"bufio"
-	"strings"
-	"strconv"
+	"flag"
+	"log"
+	"os"
 	"regexp"
+	"strconv"
+	"strings"
 	"sync"
 )
 
 func main() {
+
+	chartBoolptr := flag.Bool("chart", false, "a bool")
+	fileNameptr := flag.String("chartFileName", "default.html", "The default name of the file where the charts are plotted")
+	flag.Parse()
+	// endpointsBoolptr := flag.Bool("endpoints", false, "analyze endpoints")
+	// perfBoolptr := flag.Bool("performance", false, "collect performance metrics")
+	// appInsightsBoolptr := flag.Bool("appSpecificInsights", false, "gather app-specific insights")
+	// uidAnalBoolptr := flag.Bool("uniqueIDanalysis", false, "perform unique ID analysis")
 	f, err := os.OpenFile("timetable.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
@@ -40,7 +49,11 @@ func main() {
 		idAnal(logs)
 	}()
 	wg.Wait()
-
+	trafficAnalChan := <-logParser(logs)
+	trafficAnalResult := trafficAnalChan
+	if *chartBoolptr {
+		plotEverything(trafficAnalResult, *fileNameptr)
+	}
 }
 
 func UnitConv(Val string) float64 {
