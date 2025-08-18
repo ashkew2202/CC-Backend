@@ -9,7 +9,7 @@ import (
 )
 
 
-// This is very AI because of it being very tiresome 
+// This is very AI because of it being very repetitive
 
 func plotEverything(trafficAnal TrafficAnal, filename string) error {
 	var endpoints []string
