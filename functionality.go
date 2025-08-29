@@ -1,8 +1,10 @@
 package main
+
 import (
 	"fmt"
 	"strconv"
 )
+
 func logParser(logs [][]string) chan TrafficAnal {
 
 	trafficAnalChan := make(chan TrafficAnal)
@@ -13,7 +15,7 @@ func logParser(logs [][]string) chan TrafficAnal {
 			if len(logs[res]) < 7 {
 				if len(logs[res]) == 6 && logs[res][3] == "router:" {
 					id := logs[res][5]
-					idStr := id[1:len(id)-2]
+					idStr := id[1 : len(id)-2]
 					found := false
 					for _, uid := range traffic_anal.unique_ids {
 						if uid == idStr {
@@ -62,7 +64,7 @@ func logParser(logs [][]string) chan TrafficAnal {
 			}
 			if len(logs[res]) == 6 && logs[res][3] == "router:" {
 				id := logs[res][5]
-				idStr := id[1:len(id)-2]
+				idStr := id[1 : len(id)-2]
 				found := false
 				for _, uid := range traffic_anal.unique_ids {
 					if uid == idStr {
@@ -87,8 +89,7 @@ func logParser(logs [][]string) chan TrafficAnal {
 	return trafficAnalChan
 }
 
-
-func trafficAnal(logs [][]string)  {
+func trafficAnal(logs [][]string) {
 
 	trafficAnalChan := logParser(logs)
 	trafficAnal := <-trafficAnalChan
